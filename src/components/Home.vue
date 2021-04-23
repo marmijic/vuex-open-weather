@@ -4,6 +4,7 @@
       class="city-weather"
       v-for="(cityWeather, index) in citiesWeather"
       v-bind:key="index"
+      v-on:click="navigateTo(cityWeather.id)"
     >
       <p class="city-name">{{ cityWeather.name }}</p>
       <img
@@ -12,7 +13,7 @@
             cityWeather?.weather[0].icon +
             '.png'
         "
-        alt=""
+        :alt="cityWeather.name"
       />
       <p class="temperature">{{ cityWeather?.main?.temp }} &#8451;</p>
       <div class="temperatue"></div>
@@ -26,7 +27,12 @@ import { mapActions } from "vuex";
 export default {
   name: "Home",
   methods: {
-    ...mapActions(["fetchWeatherForCity"]),
+    ...mapActions(["fetchWeatherForCities"]),
+    navigateTo(cityId) {
+      this.$router.push({
+        path: `/forecast/${cityId}`,
+      });
+    },
   },
   computed: {
     citiesWeather() {
@@ -34,7 +40,7 @@ export default {
     },
   },
   created() {
-    this.fetchWeatherForCity();
+    this.fetchWeatherForCities();
   },
 };
 </script>
